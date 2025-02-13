@@ -27,17 +27,14 @@ def get_syllables(word):
         return None # if not in pronunciation dictionary
     
 def getWord(f):
-    random_word = random.choice(words) # gets a random word
-    
-    # Ensure that the word has a valid syllable count (not None)
-    syllable_count = get_syllables(random_word) # gets the amount of syllables
-    
-    print(f(syllable_count)) # test
-    
-    if syllable_count is not None and f(syllable_count): # returns the random_word if it was found in the pronunciation dictionary and passes the function passed in
-        return random_word
-    else:
-        return getWord(f) # recuses if random_word could not be gotten
+    while True:
+        random_word = random.choice(words) # gets a random word
+        
+        if get_syllables(random_word) is None:
+            continue
+        
+        if f(get_syllables(random_word)):
+            return random_word
 
 def getSyllablesInArr(arr):
     total = 0
