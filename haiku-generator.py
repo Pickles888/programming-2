@@ -1,4 +1,6 @@
 import random
+import sys
+from typing import Callable
 import nltk
 
 nltk.download('cmudict')
@@ -15,7 +17,7 @@ random_file = random.choice(file_ids)
 
 words = shakespeare.words(random_file)
 
-def get_syllables(word):
+def get_syllables(word) -> int:
     word = word.lower()
     if word in d: # if its in the pronunciation dictionary
         # Get the phonetic representation of the word
@@ -26,17 +28,28 @@ def get_syllables(word):
     else:
         return None # if not in pronunciation dictionary
     
-def getWord(f):
+def getWord(f: Callable[[int], bool]):
+    max_val: int = 100
+    random_word: str
+    
     while True:
+        if max_val <= 0:
+            sys.exit("Unreachable end condition given to getWord")
+        
+        max_val -= 1
+        
         random_word = random.choice(words) # gets a random word
         
         if get_syllables(random_word) is None:
             continue
         
         if f(get_syllables(random_word)):
-            return random_word
+            break
+    
+    return random_word
+    
 
-def getSyllablesInArr(arr):
+def getSyllablesInArr(arr: list[str]) -> int:
     total = 0
     
     for word in arr:
@@ -46,16 +59,29 @@ def getSyllablesInArr(arr):
     
     return total
 
-def getWordsTotalSyllables(x):
-    arr = [] 
+def getWordsTotalSyllables(x: int) -> list[str]:
+    arr: list[str] = [] 
+    
+    type(x - getSyllablesInArr(arr))
     
     while getSyllablesInArr(arr) < x: # runs if there less syllables in the array
         # runs function with lambda that checks if there are more syllables than needed until the syllables in the array are filled up
-        arr.append(getWord(lambda a: a < (x - getSyllablesInArr(arr)))) 
+        arr.append(getWord(lambda a: a <= (x - getSyllablesInArr(arr)))) 
         
     return arr
 
-word = getWordsTotalSyllables(5)
+def capitalize(s: str)  -> str:
+    if len(s) == 0:
+        return ""
+    
+    lower = s.lower()
+    
+    return lower[0].upper() + lower[1:]
 
-print(word)
-print(get_syllables(word))
+haikuListList: list[list[str]] = [getWordsTotalSyllables(5), getWordsTotalSyllables(7), getWordsTotalSyllables(5)]
+
+haiku = "\n".join(map(lambda a: " ".join(a), haikuListList))
+
+haikuCaseClean = capitalize(haiku)
+
+print(haikuCaseClean)
