@@ -62,8 +62,6 @@ def getSyllablesInArr(arr: list[str]) -> int:
 def getWordsTotalSyllables(x: int) -> list[str]:
     arr: list[str] = [] 
     
-    type(x - getSyllablesInArr(arr))
-    
     while getSyllablesInArr(arr) < x: # runs if there less syllables in the array
         # runs function with lambda that checks if there are more syllables than needed until the syllables in the array are filled up
         arr.append(getWord(lambda a: a <= (x - getSyllablesInArr(arr)))) 
@@ -78,7 +76,11 @@ def capitalize(s: str)  -> str:
     
     return lower[0].upper() + lower[1:]
 
-haikuListList: list[list[str]] = [getWordsTotalSyllables(5), getWordsTotalSyllables(7), getWordsTotalSyllables(5)]
+haikuListList: list[list[str]] = [
+    getWordsTotalSyllables(5), 
+    getWordsTotalSyllables(7), 
+    getWordsTotalSyllables(5)
+]
 
 haiku = "\n".join(map(lambda a: " ".join(a), haikuListList))
 
