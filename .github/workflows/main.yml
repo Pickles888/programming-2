@@ -1,4 +1,4 @@
-name: Deploy Tornado Application
+name: Deploy Static Site to GitHub Pages
 
 on:
   push:
@@ -23,6 +23,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install tornado
 
-    - name: Run Tornado Application
+    - name: Build Static Site
       run: |
-        python pokepy-project.py &
+        # Assuming you have a script or command to build your static site
+        python build_static_site.py
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./static_site # The directory containing your static site files
